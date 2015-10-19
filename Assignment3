@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+"""
+Created on October 5, 2015 
+@author: AliisonAmbi
+"""
+import pandas
+import numpy
+
+#Using the pandas code library to read in the data
+craterdata = pandas.read_csv('marscrater_pds.csv', low_memory = False)
+
+
+#Ensuring that numeric variables with missing data are still considered numeric by Python
+craterdata['LATITUDE_CIRCLE_IMAGE']=craterdata['LATITUDE_CIRCLE_IMAGE'].convert_objects(convert_numeric=True)
+craterdata['NUMBER_LAYERS']=craterdata['NUMBER_LAYERS'].convert_objects(convert_numeric=True)
+#Note: Dummy values were not assigned in the dataset for the variable MORPHOLOGY_EJECTA_1, 
+#so it is not numeric, but rather some kind of string/text variable 
+
+#Seeing how much data is in the dataset
+
+print("Number of craters in the data set:") 
+print(len(craterdata))
+
+print("Number of variables associated with the craters:") 
+print(len(craterdata.columns))
+
+print ("- - - - - - - - - - -")
+print ("- - - - - - - - - - -")
+
+#Exploring the distribution of craters with respect to their number of layers
+
+print("Count the number of craters with 0, 1, 2, 3, 4 and 5 layers:")
+c1 = craterdata['NUMBER_LAYERS'].value_counts(sort=False, dropna=False)
+print (c1)
+
+#NOTE: The sum of these counts = len(craterdata), so there is no missing data in this column
+
+print("Percentages of the craters that have 0, 1, 2, 3, 4 and 5 layers:")
+p1 = craterdata['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (p1*100)
+
+print ("- - - - - - - - - - -")
+
+#Exploring the distribution of craters with respect to their ejecta morphologies
+
+print("Counts of the total number of craters with specific ejecta morphologies:")
+c2 = craterdata['MORPHOLOGY_EJECTA_1'].value_counts(sort=False, dropna=False)
+print (c2)
+
+print("Percentages of the total number of craters with specific ejecta morphologies:")
+p2 = craterdata['MORPHOLOGY_EJECTA_1'].value_counts(sort=False, normalize=True)
+print (p2*100)
+
+
+print ("- - - - - - - - - - -")
+
+#Exploring the crater distributions at different latitudes
+
+print ("Using pandas.cut function to bin craters into latitude ranges")
+print('')
+print("Counts for the number of craters in each latitude range displayed in columns by number of layers")
+sublat=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>-90) & (craterdata['NUMBER_LAYERS']>=0)]
+sublat['LATITUDE_RANGE'] = pandas.cut(sublat.LATITUDE_CIRCLE_IMAGE,[-90, -60, -30, 0, 30, 60, 90])
+
+print(pandas.crosstab(sublat['LATITUDE_RANGE'], sublat['NUMBER_LAYERS']))
+
+
