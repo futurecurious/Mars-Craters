@@ -1,0 +1,143 @@
+# -*- coding: utf-8 -*-
+"""
+Created on October 5, 2015
+@author: Alison
+"""
+import pandas
+import numpy
+
+#Using the pandas code library to read in the data
+craterdata = pandas.read_csv('marscrater_pds.csv', low_memory = False)
+
+print ("- - - - - - - - - - -")
+
+#Ensuring that numeric variables with missing data are still considered numeric by Python
+craterdata['LATITUDE_CIRCLE_IMAGE']=craterdata['LATITUDE_CIRCLE_IMAGE'].convert_objects(convert_numeric=True)
+craterdata['NUMBER_LAYERS']=craterdata['NUMBER_LAYERS'].convert_objects(convert_numeric=True)
+#Note: Dummy values were not assigned in the dataset for the variable MORPHOLOGY_EJECTA_1,
+#so it needs to remain as strings/text
+
+#Seeing how much data is in the dataset
+
+print("Number of craters in the data set:")
+print(len(craterdata))
+
+print("Number of variables associated with the craters:")
+print(len(craterdata.columns))
+
+print ("- - - - - - - - - - -")
+print ("- - - - - - - - - - -")
+
+#Exploring the distribution of craters with respect to their number of layers
+
+print("Count the number of craters with 0, 1, 2, 3, 4 and 5 layers:")
+c1 = craterdata['NUMBER_LAYERS'].value_counts(sort=False, dropna=False)
+print (c1)
+
+#NOTE: The sum of these counts = len(craterdata), so there is no missing data in this column
+
+print("Percentages of the craters that have 0, 1, 2, 3, 4 and 5 layers:")
+p1 = craterdata['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (p1*100)
+
+print ("- - - - - - - - - - -")
+
+#Exploring the distribution of craters with respect to their ejecta morphologies
+
+print("Counts of the total number of craters with specific ejecta morphologies:")
+c2 = craterdata['MORPHOLOGY_EJECTA_1'].value_counts(sort=False, dropna=False)
+print (c2)
+
+print("Percentages of the total number of craters with specific ejecta morphologies:")
+p2 = craterdata['MORPHOLOGY_EJECTA_1'].value_counts(sort=False, normalize=True)
+print (p2*100)
+
+print ("- - - - - - - - - - -")
+
+#Exploring the distribution of craters with respect to their latitude
+#Just counting according to the values of LATITUDE_CIRCLE_IMAGE produces a long
+#rather uninformative list. I have therefore chosen to subdivide craters into 10 degree
+#bands of latitude and display the counts for only craters with 1, 2 and 3 layers
+
+#Crater numbers and percentages compared across latitude ranges:
+#0 to 10; 10 to 20, 20 to 30, ... 80 to 90 (Norther Hemisphere)
+#0 to -10; -10 to -20, -20 to -30, ... -80 to -90 (Southern Hemisphere) - Must be a better way to do this. Will wait to see if we learn logic loops later in the course before dividing the Southern Hemisphere.
+
+#Northern Hemisphere:
+
+print("Distribution by latitude in the Northern Hemisphere: distribution of craters with 1, 2 and 3 ejecta layers divided into 10-degree bands of latitude in the Norther Hemisphere")
+print("")
+
+print ("Number of craters between the equator and 10 degrees North")
+subN1=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>0) & (craterdata['LATITUDE_CIRCLE_IMAGE']<=10) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN1 = subN1['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN1)
+print ("Relative percentages of craters between the equator and 10 degrees North")
+psubN1 = subN1['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN1*100)
+
+print ("Number of craters between 10 & 20 degrees North")
+subN2=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>10) & (craterdata['LATITUDE_CIRCLE_IMAGE']<=20 & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1))]
+csubNN2 = subN2['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubNN2)
+print ("Relative percentages of craters between 10 & 20 degrees North")
+psubN2 = subN2['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN2*100)
+
+print ("Number of craters between 20 & 30 degrees North")
+subN3=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>20) & (craterdata['LATITUDE_CIRCLE_IMAGE']<=30 & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1))]
+csubN3 = subN3['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN3)
+print ("Relative percentages of craters between 20 & 30 degrees North")
+psubN3 = subN3['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN3*100)
+
+print ("Number of craters between 30 & 40 degrees North")
+subN4=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>30) & (craterdata['LATITUDE_CIRCLE_IMAGE']<=40 & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1))]
+csubN4 = subN4['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN4)
+print ("Relative percentages of craters between 30 & 40 degrees North")
+psubN4 = subN4['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN4*100)
+
+print ("Number of craters between 40 & 50 degrees North")
+subN5=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>40)  & (craterdata['LATITUDE_CIRCLE_IMAGE']<=50) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN5 = subN5['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN5)
+print ("Relative percentages of craters between 40 & 50 degrees North")
+psubN5 = subN5['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN5*100)
+
+print ("Number of craters between 50 & 60 degrees North")
+subN6=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>50)  & (craterdata['LATITUDE_CIRCLE_IMAGE']<=60) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN6 = subN6['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN6)
+print ("Relative percentages of craters between 50 & 60 degrees North")
+psubN6 = subN6['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN6*100)
+
+print ("Number of craters between 60 & 70 degrees North")
+subN7=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>60)  & (craterdata['LATITUDE_CIRCLE_IMAGE']<=70) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN7 = subN7['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN7)
+print ("Relative percentages of craters between 60 & 70 degrees North")
+psubN7 = subN7['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN7*100)
+
+print ("Number of craters between 70 & 80 degrees North")
+subN8=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>70)  & (craterdata['LATITUDE_CIRCLE_IMAGE']<=80) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN8 = subN8['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN8)
+print ("Relative percentages of craters between 70 & 80 degrees North")
+psubN8 = subN8['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN8*100)
+
+print ("Number of craters between 80 & 90 degrees North")
+subN9=craterdata[(craterdata['LATITUDE_CIRCLE_IMAGE']>80)  & (craterdata['LATITUDE_CIRCLE_IMAGE']<=90) & (craterdata['NUMBER_LAYERS']<=3) & (craterdata['NUMBER_LAYERS']>=1)]
+csubN9 = subN9['NUMBER_LAYERS'].value_counts(sort=False)
+print (csubN9)
+print ("Relative percentages of craters between 80 & 90 degrees North")
+psubN9 = subN9['NUMBER_LAYERS'].value_counts(sort=False, normalize=True)
+print (psubN9*100)
+
+
